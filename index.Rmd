@@ -1,7 +1,7 @@
 ---
 title: "Planilha Bassena"
 author: "Francisko de Moraes Rezende"
-date: "4/17/2021"
+date: "2021-04-17"
 output:
   html_document:
     toc: true
