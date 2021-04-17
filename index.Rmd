@@ -1,0 +1,59 @@
+---
+title: "Planilha Bassena"
+author: "Francisko de Moraes Rezende"
+date: "4/17/2021"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+list_of_packages <- c("tidyverse", "readxl", "here", "janitor", "DT")
+new_packages <- list_of_packages[!(list_of_packages %in% installed.packages()[,"Package"])]
+if(length(new_packages)) install.packages(new_packages)
+
+
+
+library(tidyverse)
+library(readxl)
+library(here)
+library(janitor)
+library(DT)
+```
+
+# Código
+
+```{r}
+(ordem <-
+   readxl::read_xlsx(
+     path = here::here("data", "Dados planilha.xlsx"),
+     sheet = 1
+   ) %>%
+   janitor::clean_names() %>% 
+   pull(ordem_dos_dados))  
+```
+
+
+```{r}
+(data <- readxl::read_xlsx(path = here::here("data", "Dados planilha.xlsx"), sheet = 2) %>% 
+   dplyr::rename(list_6 = `List 6`) %>% 
+   dplyr::arrange(factor(list_6, levels = ordem))) 
+```
+
+# Aqui o resultado
+
+```{r}
+data %>%  
+  DT::datatable(extensions = 'Buttons',
+                options = list(dom = 'Blfrtip',
+                               buttons = c('copy', 'csv', 'excel', 'pdf', 'print'),
+                               lengthMenu = list(c(10,25,50,-1),
+                                                 c(10,25,50,"All"))))
+```
+
